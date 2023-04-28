@@ -1,9 +1,11 @@
-module macro_mux_ndff (
+module macro_mux_ndff #(
+    MUXNDFF_WIDTH = 8
+) (
     input clk,
-    input [7:0] data,  //data of clka
+    input [MUXNDFF_WIDTH-1:0] data,  //data of clka
     input en,  //en of clka
     input rstn,  //rstn of clkb
-    output reg [7:0] data_sync
+    output reg [MUXNDFF_WIDTH-1:0] data_sync
 );
   wire en_sync;
   macro_ndff u_macro_ndff (
@@ -14,7 +16,7 @@ module macro_mux_ndff (
   );
   always @(posedge clk or negedge rstn) begin
     if (~rstn) begin
-      data_sync <= 8'd0;
+      data_sync <= {MUXNDFF_WIDTH{1'b0}};
     end else if (en_sync) begin
       data_sync <= data;
     end
