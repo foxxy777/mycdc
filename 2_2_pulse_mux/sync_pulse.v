@@ -8,21 +8,21 @@ module sync_pulse (
 );
   wire enable;
   assign enable = ina;
-  wire mux_a;
-  reg  toggle_a;
+  wire pulse_2_level;
+  reg  p2l_d;
   always @(posedge clka or negedge rsta) begin
     if (~rsta) begin
-      toggle_a <= 1'b0;
+      p2l_d <= 1'b0;
     end else begin
-      toggle_a <= mux_a;
+      p2l_d <= pulse_2_level;
     end
   end
-  assign mux_a = enable ? ~toggle_a : toggle_a;
+  assign pulse_2_level = enable ? ~p2l_d : p2l_d;
   wire ndff;
   macro_ndff u_macro_ndff (
       .clk(clkb),
       .rstn(rstb),
-      .d(toggle_a),
+      .d(p2l_d),
       .q(ndff)
   );
   reg ndff_d;
